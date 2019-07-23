@@ -1,6 +1,7 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./index.scss";
-import { Products } from "./pages";
+import { Products, Cart, Favourites, PageNotFound } from "./pages";
 import { Layout } from "./components";
 
 class App extends React.Component {
@@ -26,9 +27,26 @@ class App extends React.Component {
   render() {
     const { products, isLoading, error } = this.state;
     return (
-      <Layout>
-        <Products products={products} isLoading={isLoading} error={error} />
-      </Layout>
+      <Router>
+        <Layout>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => (
+                <Products
+                  products={products}
+                  isLoading={isLoading}
+                  error={error}
+                />
+              )}
+            />
+            <Route path="/cart" exact component={Cart} />
+            <Route path="/favourites" exact component={Favourites} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </Layout>
+      </Router>
     );
   }
 }

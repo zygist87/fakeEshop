@@ -6,14 +6,21 @@ import {
   Redirect
 } from "react-router-dom";
 import "./index.scss";
-import { Products, Cart, Favourites, PageNotFound } from "./pages";
+import {
+  Products,
+  Cart,
+  Favourites,
+  PageNotFound,
+  SingleProduct
+} from "./pages";
 import { Layout } from "./components";
+import { ROUTES } from "../constants";
 
 class App extends React.Component {
   state = {
     products: [],
     favourites: [],
-    isLoading: false,
+    isLoading: false, //pakeisti i true
     error: null,
     cart: []
   };
@@ -26,7 +33,7 @@ class App extends React.Component {
     if (response.ok) {
       const json = await response.json();
       this.setState({
-        products: json,
+        products: [{ ...json[0], id: "hello" }, ...json], //nutrinti ir palikti products: json,
         isLoading: false
       });
     } else {
@@ -73,7 +80,7 @@ class App extends React.Component {
         <Layout>
           <Switch>
             <Route
-              path="/"
+              path={ROUTES.defaultPage}
               exact
               render={() => (
                 <Products
@@ -89,12 +96,12 @@ class App extends React.Component {
               )}
             />
             <Route
-              path="/cart"
+              path={ROUTES.cart}
               exact
               render={() => <Cart cart={cart} products={products} />}
             />
             <Route
-              path="/favourites"
+              path={ROUTES.favourites}
               exact
               render={() => (
                 <Favourites
@@ -107,7 +114,22 @@ class App extends React.Component {
                 />
               )}
             />
-            <Redirect from="/home" to="/" exact />
+            <Route
+              path={ROUTES.product}
+              exact
+              render={props => {
+                const { id } = props.match.params;
+                const product = products.find(product => product.id === id);
+                return (
+                  <SingleProduct
+                    {...props}
+                    product={product}
+                    isLoading={isLoading}
+                  />
+                );
+              }}
+            />
+            <Redirect from={ROUTES.home} to={ROUTES.defaultPage} exact />
             <Route component={PageNotFound} />
           </Switch>
         </Layout>

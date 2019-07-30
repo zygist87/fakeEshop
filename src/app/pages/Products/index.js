@@ -6,11 +6,9 @@ function Products({
   isLoading,
   error,
   products = [],
-  toggleFavourite,
   favourites,
-  addToCart,
-  removeFromCart,
-  cart
+  cart,
+  ...restProps
 }) {
   return (
     <div className="Products">
@@ -20,13 +18,11 @@ function Products({
         const { count = 0 } = cart.find(({ id }) => id === data.id) || {};
         return (
           <ProductCard
-            removeFromCart={removeFromCart}
-            toggleFavourite={toggleFavourite}
+            {...restProps}
             key={data.id}
             {...data}
             isFavourite={favourites.includes(data.id)}
             cartCount={count}
-            addToCart={addToCart}
           />
         );
       })}

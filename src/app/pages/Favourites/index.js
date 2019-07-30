@@ -2,37 +2,32 @@ import React from "react";
 import "./index.scss";
 import { ProductCard } from "../../components";
 
-function Favourites({
-  favourites,
-  products = [],
-  cart,
-  toggleFavourite,
-  addToCart,
-  removeFromCart
-}) {
+function Error() {
+  return (
+    <p>
+      Oh no, you dont have
+      <span role="img" aria-label="broken heart">
+        blabla 💔
+      </span>
+    </p>
+  );
+}
+
+function Favourites({ favourites, products = [], cart, ...restProps }) {
   const favouriteProducts = products.filter(product =>
     favourites.includes(product.id)
   );
   return (
     <div className="Favourites">
-      {!favourites.length && (
-        <p>
-          Oh no, you dont have
-          <span role="img" aria-label="broken heart">
-            blabla 💔
-          </span>
-        </p>
-      )}
+      {!favourites.length && <Error />}
       {favouriteProducts.map(data => {
         const { count = 0 } = cart.find(({ id }) => id === data.id) || {};
         return (
           <ProductCard
-            removeFromCart={removeFromCart}
+            {...restProps}
             key={data.id}
             {...data}
-            toggleFavourite={toggleFavourite}
             isFavourite
-            addToCart={addToCart}
             cartCount={count}
           />
         );

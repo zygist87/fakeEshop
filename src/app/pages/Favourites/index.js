@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import "./index.scss";
 import { ProductCard } from "../../components";
 
@@ -13,27 +14,24 @@ function Error() {
   );
 }
 
-function Favourites({ favourites, products = [], cart, ...restProps }) {
-  const favouriteProducts = products.filter(product =>
-    favourites.includes(product.id)
-  );
+function Favourites({ favourites, ...restProps }) {
   return (
     <div className="Favourites">
       {!favourites.length && <Error />}
-      {favouriteProducts.map(data => {
-        const { count = 0 } = cart.find(({ id }) => id === data.id) || {};
-        return (
-          <ProductCard
-            {...restProps}
-            key={data.id}
-            {...data}
-            isFavourite
-            cartCount={count}
-          />
-        );
+      {favourites.map(data => {
+        return <ProductCard {...restProps} key={data.id} {...data} />;
       })}
     </div>
   );
 }
 
-export default Favourites;
+function mapStateToProps(state) {
+  const { products, favourites } = state.shop;
+
+  const favouriteProducts = products.filter(product =>
+    favourites.includes(product.id)
+  );
+  return { favourites: favouriteProducts };
+}
+
+export default connect(mapStateToProps)(Favourites);

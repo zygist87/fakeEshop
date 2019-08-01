@@ -1,5 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
+import shop from "../shop";
 
 import {
   BrowserRouter as Router,
@@ -26,7 +27,7 @@ function onError() {
 }
 
 function onSuccess(payload) {
-  store.dispatch({ type: "SET_PRODUCTS", payload });
+  store.dispatch({ type: shop.actionTypes.SET_PRODUCTS, payload });
   return payload;
 }
 function App() {
@@ -53,17 +54,9 @@ function App() {
             <Route
               path={ROUTES.product}
               exact
-              render={props => {
-                const { id } = props.match.params;
-                const product = products.find(product => product.id === id);
-                return (
-                  <SingleProduct
-                    {...props}
-                    product={product}
-                    isLoading={isLoading}
-                  />
-                );
-              }}
+              render={props => (
+                <SingleProduct {...props} isLoading={isLoading} />
+              )}
             />
             <Redirect from={ROUTES.home} to={ROUTES.defaultPage} exact />
             <Route component={PageNotFound} />

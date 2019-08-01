@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import "./index.scss";
+import shop from "../../../shop";
 
 function ProductCard({
   name,
@@ -74,9 +75,14 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, { id }) {
   return {
     addToCart: count =>
-      dispatch({ type: "ADD_TO_CART", payload: { id, count: count + 1 } }),
-    removeFromCart: () => dispatch({ type: "REMOVE_FROM_CART", payload: id }),
-    toggleFavourite: () => dispatch({ type: "TOGGLE_FAVOURITE", payload: id })
+      dispatch({
+        type: shop.actionTypes.ADD_TO_CART,
+        payload: { id, count: count + 1 }
+      }),
+    removeFromCart: () =>
+      dispatch({ type: shop.actionTypes.REMOVE_FROM_CART, payload: id }),
+    toggleFavourite: () =>
+      dispatch({ type: shop.actionTypes.TOGGLE_FAVOURITE, payload: id })
   };
 }
 

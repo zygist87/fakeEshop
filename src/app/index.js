@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import shop from "../shop";
 
@@ -18,47 +18,23 @@ import {
 } from "./pages";
 import { Layout } from "./components";
 import { ROUTES } from "../constants";
-import { useFetch } from "./hooks";
 
 import store from "./state";
 
-function onError() {
-  return "Opps, something goes wrong";
-}
-
-function onSuccess(payload) {
-  store.dispatch(shop.actions.setProducts(payload));
-
-  return payload;
-}
 function App() {
-  const { loading: isLoading, error } = useFetch({
-    onError,
-    src: "https://boiling-reaches-93648.herokuapp.com/food-shop/products",
-    initialState: [],
-    dataKey: "products",
-    onSuccess
-  });
+  useEffect(() => {
+    store.dispatch(shop.actions.getProducts());
+  }, []);
 
   return (
     <Provider store={store}>
       <Router>
         <Layout>
           <Switch>
-            <Route
-              path={ROUTES.defaultPage}
-              exact
-              render={() => <Products isLoading={isLoading} error={error} />}
-            />
+            <Route path={ROUTES.defaultPage} exact component={Products} />
             <Route path={ROUTES.cart} exact component={Cart} />
             <Route path={ROUTES.favourites} exact component={Favourites} />
-            <Route
-              path={ROUTES.product}
-              exact
-              render={props => (
-                <SingleProduct {...props} isLoading={isLoading} />
-              )}
-            />
+            <Route path={ROUTES.product} exact component={SingleProduct} />
             <Redirect from={ROUTES.home} to={ROUTES.defaultPage} exact />
             <Route component={PageNotFound} />
           </Switch>

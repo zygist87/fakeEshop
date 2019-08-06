@@ -1,4 +1,5 @@
 import * as types from "./actionTypes";
+import { API } from "../constants";
 
 export const removeFromCart = id => ({
   type: types.REMOVE_FROM_CART,
@@ -24,7 +25,7 @@ export const getProducts = () => async dispatch => {
   dispatch({ type: types.GET_PRODUCTS });
 
   try {
-    const result = await fetch("");
+    const result = await fetch(API.getProducts);
     const json = await result.json();
 
     dispatch({ type: types.GET_PRODUCTS_SUCCESS, payload: json });
@@ -34,6 +35,4 @@ export const getProducts = () => async dispatch => {
       payload: "Something went bad!"
     });
   }
-
-  dispatch({ type: types.GET_PRODUCTS });
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.scss";
 import { ProductCard } from "../../components";
+import shop from "../../../shop";
 
 function Error() {
   return (
@@ -26,12 +27,7 @@ function Favourites({ favourites, ...restProps }) {
 }
 
 function mapStateToProps(state) {
-  const { products, favourites } = state.shop;
-
-  const favouriteProducts = products.filter(product =>
-    favourites.includes(product.id)
-  );
-  return { favourites: favouriteProducts };
+  return { favourites: shop.selectors.getFavouriteProducts(state) };
 }
 
 export default connect(mapStateToProps)(Favourites);

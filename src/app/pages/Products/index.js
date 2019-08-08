@@ -1,31 +1,16 @@
-import React from "react";
-import { Loader, ProductCard } from "../../components";
+import React, { useContext } from "react";
+import { Loader, ProductCard, ShopContext } from "../../components";
 import "./index.scss";
 
-function Products({
-  isLoading,
-  error,
-  products = [],
-  favourites,
-  cart,
-  ...restProps
-}) {
+function Products() {
+  const { products, error, loading } = useContext(ShopContext);
   return (
     <div className="Products">
-      {isLoading && <Loader />}
+      {loading && <Loader />}
       {error && <p>{error}</p>}
-      {products.map(data => {
-        const { count = 0 } = cart.find(({ id }) => id === data.id) || {};
-        return (
-          <ProductCard
-            {...restProps}
-            key={data.id}
-            {...data}
-            isFavourite={favourites.includes(data.id)}
-            cartCount={count}
-          />
-        );
-      })}
+      {products.map(data => (
+        <ProductCard key={data.id} {...data} />
+      ))}
     </div>
   );
 }

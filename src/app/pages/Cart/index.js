@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./index.scss";
+import ShopContext from "../../components/ShopContext";
 
 function Error() {
   return (
@@ -41,7 +42,8 @@ function CartRow({ name, count, price, currencySymbol }) {
     </div>
   );
 }
-function Cart({ products, cart }) {
+function Cart() {
+  const { products, cart } = useContext(ShopContext);
   const cartItems = cart.map(item => {
     const product = products.find(({ id }) => id === item.id);
 

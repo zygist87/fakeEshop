@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./index.scss";
+//import { withBackgroundColor } from "../BackgroundContext";
+import BackgroundContext from "../BackgroundContext";
+import ShopContext from "../ShopContext";
 
 function ProductCard({
   name,
@@ -8,18 +11,31 @@ function ProductCard({
   description,
   price,
   currencySymbol,
-  id,
-  toggleFavourite,
-  isFavourite,
-  addToCart,
-  cartCount,
-  removeFromCart
+  id
+
+  // background,
+  // setBackground
 }) {
+  const {
+    removeFromCart,
+    toggleFavourite,
+    addToCart,
+    favourites,
+    cart
+  } = useContext(ShopContext);
+
+  const isFavourite = favourites.some(itemId => itemId === id);
+  const cartIndex = cart.findIndex(item => item.id === id);
+  const cartCount = cartIndex > -1 ? cart[cartIndex].count : 0;
+  const { background, setBackground } = useContext(BackgroundContext);
   const className = isFavourite
     ? "ProductCard ProductCard__favourite"
     : "ProductCard";
+  const randomColor = () =>
+    setBackground("#" + ((Math.random() * 0xffffff) << 0).toString(16));
+
   return (
-    <div className={className}>
+    <div style={{ background }} className={className}>
       <div className="ProductCard--image">
         <img alt={`product: ${name}`} src={image} />
       </div>
@@ -55,10 +71,14 @@ function ProductCard({
               <div className="ProductCard--cta-count">{cartCount}</div>
             )}
           </button>
+          <button type="button" onClick={randomColor}>
+            Change Color
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
+// export default withBackgroundColor(ProductCard);
 export default ProductCard;

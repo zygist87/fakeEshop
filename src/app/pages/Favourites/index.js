@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./index.scss";
-import { ProductCard } from "../../components";
+import { ProductCard, ShopContext } from "../../components";
 
 function Error() {
   return (
@@ -13,25 +13,17 @@ function Error() {
   );
 }
 
-function Favourites({ favourites, products = [], cart, ...restProps }) {
+function Favourites() {
+  const { products, favourites } = useContext(ShopContext);
   const favouriteProducts = products.filter(product =>
     favourites.includes(product.id)
   );
   return (
     <div className="Favourites">
       {!favourites.length && <Error />}
-      {favouriteProducts.map(data => {
-        const { count = 0 } = cart.find(({ id }) => id === data.id) || {};
-        return (
-          <ProductCard
-            {...restProps}
-            key={data.id}
-            {...data}
-            isFavourite
-            cartCount={count}
-          />
-        );
-      })}
+      {favouriteProducts.map(data => (
+        <ProductCard key={data.id} {...data} />
+      ))}
     </div>
   );
 }

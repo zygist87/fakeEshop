@@ -13,8 +13,7 @@ const StyledFooter = styled.footer`
 function Footer() {
   return (
     <StyledFooter>
-      © Copy hfushdkvfdkvghdfkjhkdshghfdghkjdfhgkjfhdgkhdshfghdhgfkdhgkdfh{" "}
-      {new Date().getFullYear()}
+      © Copyright by React Wizards Guild | {new Date().getFullYear()}
     </StyledFooter>
   );
 }
